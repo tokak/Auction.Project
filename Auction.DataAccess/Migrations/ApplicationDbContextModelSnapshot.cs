@@ -53,7 +53,7 @@ namespace Auction.DataAccess.Migrations
 
                     b.HasIndex("VehicleId");
 
-                    b.ToTable("Bid");
+                    b.ToTable("Bids");
                 });
 
             modelBuilder.Entity("Auction.DataAccess.Domain.PaymentHistory", b =>
@@ -83,7 +83,7 @@ namespace Auction.DataAccess.Migrations
 
                     b.HasIndex("VehicleId");
 
-                    b.ToTable("PaymentHistory");
+                    b.ToTable("PaymentHistories");
                 });
 
             modelBuilder.Entity("Auction.DataAccess.Domain.Vehicle", b =>
@@ -146,7 +146,7 @@ namespace Auction.DataAccess.Migrations
 
                     b.HasIndex("SellerId");
 
-                    b.ToTable("Vehicle");
+                    b.ToTable("Vehicles");
                 });
 
             modelBuilder.Entity("Auction.DataAccess.Models.ApplicationUser", b =>

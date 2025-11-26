@@ -1,17 +1,25 @@
+using Auction.Business.Abstraction;
+using Auction.Business.Concrete;
+using Auction.Business.Mapper;
+using Auction.Core.Models;
 using Auction.DataAccess.Context;
+using Auction.DataAccess.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+builder.Services.AddIdentity<ApplicationUser,IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped(typeof(ApiResponse));
+//builder.Services.AddAutoMapper(typeof(MappingProfile));
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
