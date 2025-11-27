@@ -114,9 +114,9 @@ namespace Auction.Business.Concrete
                 }
                 else if (model.UserType.ToString().ToLower() == UserType.Seller.ToString().ToLower())
                 {
-                    await _userManager.AddToRoleAsync(newUser, UserType.NormalUser.ToString());
+                    await _userManager.AddToRoleAsync(newUser, UserType.Seller.ToString());
                 }
-                else
+                else if(model.UserType.ToString().ToLower() == UserType.NormalUser.ToString().ToLower())
                 {
                     await _userManager.AddToRoleAsync(newUser, UserType.NormalUser.ToString());
                 }

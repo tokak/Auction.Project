@@ -2,6 +2,7 @@
 using Auction.Business.Dtos;
 using Auction.Core.Models;
 using Auction.DataAccess.Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,18 +22,18 @@ namespace Auction.Project.Controllers
         }
 
         [HttpPost("CreateVehicle")]
-        public async Task<IActionResult> AddVehicle([FromForm]CreateVehicleDto model)
+        public async Task<IActionResult> AddVehicle([FromForm] CreateVehicleDto model)
         {
             if (ModelState.IsValid)
             {
-                if (model.File == null || model.File.Length ==0)
+                if (model.File == null || model.File.Length == 0)
                 {
                     return BadRequest();
                 }
-                string uploadsFolder = Path.Combine(_webHostEnvironment.ContentRootPath,"images");
+                string uploadsFolder = Path.Combine(_webHostEnvironment.ContentRootPath, "images");
                 string fileName = $"{Guid.NewGuid()}{Path.GetExtension(model.File.FileName)}";
-                string filePath = Path.Combine(uploadsFolder,fileName);
-                
+                string filePath = Path.Combine(uploadsFolder, fileName);
+
                 model.Image = fileName;
                 var result = await _vehicleService.CreateVehicle(model);
                 if (result.isSuccess)
@@ -66,6 +67,7 @@ namespace Auction.Project.Controllers
             return BadRequest();
         }
 
+        [Authorize(Roles = "Administrator")]
         [HttpDelete("{vehicleId}")]
         public async Task<IActionResult> DeleteVehicle([FromRoute] int vehicleId)
         {
