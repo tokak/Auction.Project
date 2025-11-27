@@ -1,5 +1,7 @@
 ﻿using Auction.DataAccess.Models;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Auction.DataAccess.Domain
 {
@@ -13,16 +15,25 @@ namespace Auction.DataAccess.Domain
         public string Color { get; set; }
         public decimal EngineCapacity { get; set; }
         public decimal Price { get; set; }
+
         public int Millage { get; set; }
         public string PlateNumber { get; set; }
+
         public double AuctionPrice { get; set; }
         public string AdditionalInformation { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public bool IsActive { get; set; }
         public string Image { get; set; }
-        public string SellerId { get; set; }
+        public string? SellerId { get; set; }
+        [JsonIgnore]
+        [ForeignKey("SellerId")]
         public ApplicationUser Seller { get; set; }
+
         public virtual List<Bid> Bids { get; set; }
+
+        public PaymentHistory? Payment { get; set; }
+
+
     }
 }
