@@ -15,9 +15,9 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddPersistenceLayer(builder.Configuration);
 builder.Services.AddApplicationLayer(builder.Configuration);
-
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 //builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+builder.Services.AddSwaggerCollection(builder.Configuration);
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
@@ -30,7 +30,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseAuthentication();    
 app.UseAuthorization();
 
 app.MapControllers();
