@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Auction.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251126195134_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20251127222543_initialcreate")]
+    partial class initialcreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,7 +33,7 @@ namespace Auction.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BidId"));
 
-                    b.Property<decimal>("Amount")
+                    b.Property<decimal>("BidAmount")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("BidDate")
@@ -44,7 +44,6 @@ namespace Auction.DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("VehicleId")
@@ -67,11 +66,19 @@ namespace Auction.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PaymentId"));
 
+                    b.Property<string>("ClientSecret")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("PayDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("StripePaymentIntentId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -84,7 +91,8 @@ namespace Auction.DataAccess.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.HasIndex("VehicleId");
+                    b.HasIndex("VehicleId")
+                        .IsUnique();
 
                     b.ToTable("PaymentHistories");
                 });
@@ -175,7 +183,6 @@ namespace Auction.DataAccess.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("FullName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
@@ -202,7 +209,6 @@ namespace Auction.DataAccess.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("ProfilePicture")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
@@ -365,9 +371,7 @@ namespace Auction.DataAccess.Migrations
                 {
                     b.HasOne("Auction.DataAccess.Models.ApplicationUser", "User")
                         .WithMany("Bids")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.HasOne("Auction.DataAccess.Domain.Vehicle", "Vehicle")
                         .WithMany("Bids")
@@ -389,8 +393,8 @@ namespace Auction.DataAccess.Migrations
                         .IsRequired();
 
                     b.HasOne("Auction.DataAccess.Domain.Vehicle", "Vehicle")
-                        .WithMany()
-                        .HasForeignKey("VehicleId")
+                        .WithOne("Payment")
+                        .HasForeignKey("Auction.DataAccess.Domain.PaymentHistory", "VehicleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -464,6 +468,8 @@ namespace Auction.DataAccess.Migrations
             modelBuilder.Entity("Auction.DataAccess.Domain.Vehicle", b =>
                 {
                     b.Navigation("Bids");
+
+                    b.Navigation("Payment");
                 });
 
             modelBuilder.Entity("Auction.DataAccess.Models.ApplicationUser", b =>
