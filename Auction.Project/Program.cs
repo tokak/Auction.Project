@@ -4,6 +4,7 @@ using Auction.Business.Mapper;
 using Auction.Core.Models;
 using Auction.DataAccess.Context;
 using Auction.DataAccess.Models;
+using Auction.Project.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
@@ -11,15 +12,12 @@ using System.Reflection;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
-builder.Services.AddIdentity<ApplicationUser,IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped(typeof(ApiResponse));
-//builder.Services.AddAutoMapper(typeof(MappingProfile));
-builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+builder.Services.AddPersistenceLayer(builder.Configuration);
+builder.Services.AddApplicationLayer(builder.Configuration);
+
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+//builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
