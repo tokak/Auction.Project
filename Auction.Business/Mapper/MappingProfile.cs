@@ -18,7 +18,7 @@ namespace Auction.Business.Mapper
             CreateMap<CreateVehicleDto, Vehicle>().ReverseMap();
             CreateMap<UpdateVehicleDto, Vehicle>().ReverseMap();
             CreateMap<CreateBidDTO, Bid>().ReverseMap();
-            CreateMap<UpdateBidDTO, Bids>().ReverseMap();
+            CreateMap<UpdateBidDTO, Bid>().ReverseMap();
         }
     }
 }

@@ -14,6 +14,7 @@ namespace Auction.Project.Extensions
             services.AddScoped<IVehicleService, VehicleService>();
             services.AddScoped<IBidService, BidService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IPaymentHistoryService, PaymentHistoryService>();
             services.AddScoped(typeof(ApiResponse));
             return services;
             #endregion
