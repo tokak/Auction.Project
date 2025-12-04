@@ -18,6 +18,9 @@ builder.Services.AddApplicationLayer(builder.Configuration);
 builder.Services.AddInfrastructureLayer(builder.Configuration);
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 //builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+builder.Services.AddCors();
+
+
 builder.Services.AddSwaggerCollection(builder.Configuration);
 builder.Services.AddSwaggerGen();
 
@@ -30,6 +33,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors(x=>x.AllowAnyMethod().AllowAnyHeader().SetIsOriginAllowed(origin=>true).AllowCredentials());
 app.UseHttpsRedirection();
 app.UseAuthentication();    
 app.UseAuthorization();
